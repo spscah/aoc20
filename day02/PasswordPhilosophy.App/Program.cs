@@ -15,11 +15,9 @@ namespace PasswordPhilosophy.App
             int inrangeA = 0;
             int inrangeB = 0;
 
-            IList<string> entries = new List<string> {"1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"};
-            entries = File.ReadAllLines(@"codes.txt");
+            IList<string> entries = File.ReadAllLines(@"codes.txt");
             foreach(string entry in entries)
             {
-
                 Match m = re.Match(entry);
                 if (m.Success)
                 {
@@ -27,7 +25,6 @@ namespace PasswordPhilosophy.App
                     int upper = Convert.ToInt32(m.Groups[2].Value);
                     char target = m.Groups[3].Value[0];
                     int instances = m.Groups[4].Value.Count(c => c == target);
-
                     
                     if(instances >= lower && instances <= upper)
                         ++inrangeA;
