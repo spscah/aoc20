@@ -25,7 +25,7 @@ namespace Handheld.Assembler.App
             }
             Debug.Assert(cr.FirstCycle() == 1317);    
             Debug.Assert(cr.FindCorruption() == 1033);
-            
+
             Console.WriteLine("If you get here, all is good.");
         }
     }

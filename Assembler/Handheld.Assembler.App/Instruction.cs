@@ -2,7 +2,8 @@ using System;
 
 namespace Handheld.Assembler.App
 {
-    class Instruction {
+    // an immutable class 
+    class Instruction : ICloneable {
         readonly Operator _operator;
         readonly int _offset;
 
@@ -23,6 +24,11 @@ namespace Handheld.Assembler.App
         public override string ToString()
         {
             return string.Format("{0} {1}{2}", _operator, _offset < 0 ? "" : "+", _offset);
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
         }
     }
 }
