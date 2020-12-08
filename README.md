@@ -34,3 +34,7 @@ sets - unions and intersections
 ### Day 7
 
 Breadth first search, (repeating) pattern matching    
+
+### Day 8 
+
+Building your own assembler, maintaining state, classes, possibly Enums, 
