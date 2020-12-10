@@ -42,3 +42,7 @@ Building your own assembler, maintaining state, classes, possibly Enums
 ### Day 9 
 
 List manipulation 
+
+### Day 10
+
+Simplification (vs brute force), recursion 
