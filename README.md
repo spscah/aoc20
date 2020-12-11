@@ -46,3 +46,7 @@ List manipulation
 ### Day 10
 
 Simplification (vs brute force), recursion 
+
+### Day 11 
+
+Grid representation 
