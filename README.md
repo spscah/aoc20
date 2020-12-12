@@ -50,3 +50,8 @@ Simplification (vs brute force), recursion
 ### Day 11 
 
 Grid representation 
+
+### Day 12 
+
+holding state, rotations, regex(?) 
+
