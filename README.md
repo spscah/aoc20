@@ -53,5 +53,9 @@ Grid representation
 
 ### Day 12 
 
-holding state, rotations, regex(?) 
+holding state, rotations, regex(?)
+
+### Day 13 
+
+mods, GCD, chinese remainder theorem, modular inverses, or (possibly) sieves,   
 
