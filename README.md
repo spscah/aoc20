@@ -59,3 +59,6 @@ holding state, rotations, regex(?)
 
 mods, GCD, chinese remainder theorem, modular inverses, or (possibly) sieves,   
 
+### Day 14
+
+bitmasks, denary-binary convertsion, (ugly) string manipulation  
