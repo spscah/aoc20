@@ -62,3 +62,7 @@ mods, GCD, chinese remainder theorem, modular inverses, or (possibly) sieves,
 ### Day 14
 
 bitmasks, denary-binary convertsion, (ugly) string manipulation  
+
+### Day 15
+
+holding state, avoiding brute force 
