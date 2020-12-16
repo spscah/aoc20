@@ -66,3 +66,8 @@ bitmasks, denary-binary convertsion, (ugly) string manipulation
 ### Day 15
 
 holding state, avoiding brute force 
+
+### Day 16 
+
+side-effects, holding state, regex 
+
