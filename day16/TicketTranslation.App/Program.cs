@@ -63,7 +63,6 @@ namespace TicketTranslation.App
                 foreach(KeyValuePair<string, Range> kvp in validityRanges)
                     if(kvp.Value.InRange(value))
                         thisOption.Add(kvp.Key);
-
             }
 
             ++linecount;

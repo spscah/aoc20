@@ -71,3 +71,11 @@ holding state, avoiding brute force
 
 side-effects, holding state, regex 
 
+### Day 17
+
+grid / cube representation 
+
+### Day 18 
+
+regex, parsing, recursion (possibly) 
+
