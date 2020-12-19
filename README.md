@@ -79,3 +79,6 @@ grid / cube representation
 
 regex, parsing, recursion (possibly) 
 
+### Day 19
+
+context free grammars, parsing, regex?, inheritance/polymorphism? 
