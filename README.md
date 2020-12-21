@@ -82,3 +82,8 @@ regex, parsing, recursion (possibly)
 ### Day 19
 
 context free grammars, parsing, regex?, inheritance/polymorphism? 
+
+### Day 20 
+
+DFS, multi-dimensional arrays, RTQ 
+
