@@ -87,3 +87,6 @@ context free grammars, parsing, regex?, inheritance/polymorphism?
 
 DFS, multi-dimensional arrays, RTQ 
 
+### Day 21
+
+regex, set intersections 
