@@ -95,3 +95,7 @@ regex, set intersections
 
 Queues, Recursion 
 
+### Day 23
+
+List management, Linked Lists/Circular collections (?), brute force limitations 
+
