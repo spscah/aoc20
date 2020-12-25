@@ -102,3 +102,8 @@ List management, Linked Lists/Circular collections (?), brute force limitations
 ### Day 24
 
 Parsing, hex grid representation (e.g. cube co-ordinates), brute force limitation   
+
+### Day 25
+
+Discrete logarithms, large modulars, Diffie-Hellman 
+
