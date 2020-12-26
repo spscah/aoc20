@@ -33,149 +33,58 @@ namespace LobbyLayout.App
                 "wseweeenwnesenwwwswnew"
             };
 
-            Debug.Assert(LayItOut(tiles) == 10);
-            Debug.Assert(LayItOut(tiles, true) == 2208);
+            Debug.Assert(CubicGrid(tiles) == 10);
+            Debug.Assert(CubicGrid(tiles, true) == 2208);
 
             tiles = File.ReadAllLines(@"tiles.txt");
-            Debug.Assert(LayItOut(tiles) == 312);
-            Console.WriteLine(LayItOut(tiles, true));
+            Debug.Assert(CubicGrid(tiles) == 312);
+            Debug.Assert(CubicGrid(tiles, true) == 3733); 
 
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("That'll do pig, that'll do.");
         }
 
-        static int LayItOut(IList<string> tiles, bool parttwo = false)
-        {
-            IList<Tile> listOfTiles = new List<Tile>();
-            foreach(string route in tiles){
-                Tile t = Tile.TileMaker(route);
-                int i = listOfTiles.IndexOf(t);
-                if(i < 0)
-                    listOfTiles.Add(t);
-                else    
-                    listOfTiles[i].Flip();
+        // cube co-ordinates: 3-axes: nw-se (Ll), ne-sw (Rr), e-w (+1,-1) in those orders  
+        // but each nw can be replaced by a ne & w (Re) and each se by a sw & e (re), so we can use a 2d representation of a 3d location 
+        static int CubicGrid(IList<string> tiles, bool parttwo = false) {
+            tiles = tiles.Select(t => t.Replace("nw", "Rw").Replace("ne", "R").Replace("se", "re").Replace("sw", "r")).ToList();
+            int dim = tiles.Select(t => t.Length).Max() + (parttwo ? 101 : 0); // 101 to allow for 100 turns, plus one for the neighbours 
+            int sz = dim * 2 + 1;
+            bool[,] cubicgrid = new bool[sz,sz];
+
+            foreach(string tile in tiles.Where(t => !string.IsNullOrEmpty(t))) {
+                int ne = dim;
+                int e = dim;
+                foreach(char c in tile) {
+                    switch(c) {
+                        case('R'): ++ne; break; 
+                        case('r'): --ne; break; 
+                        case('e'): ++e; break;
+                        case('w'): --e; break;
+                    }
+                }
+                cubicgrid[ne,e] = !cubicgrid[ne,e]; 
             }
-            if(!parttwo)
-                return listOfTiles.Where(t => !t.IsWhite).Count();
 
-            int rv = 0;
-            for(int turn = 0; turn < 100; ++turn) {
-                int minX = listOfTiles.Select(t => t.X).Min()-2;
-                int maxX = listOfTiles.Select(t => t.X).Max()+2;
-                int minY = listOfTiles.Select(t => t.Y).Min()-2;
-                int maxY = listOfTiles.Select(t => t.Y).Max()+2;
-                for(int x = minX; x <= maxX; ++x) 
-                    for(int y = minY; y <= maxY; ++y)
-                        if( Math.Abs(x%2) == Math.Abs(y%2)) 
-                            Tile.EnsureExistence(x, y, listOfTiles);
-                
-                IList<Tile> toFlip = listOfTiles.Where(tf => tf.NeedsToFlip()).ToList(); //create the list                     
-                foreach(Tile tf in toFlip) // then flip it, *must* be after the identification phase 
-                    tf.Flip();
-                rv = listOfTiles.Where(t => !t.IsWhite).Count();
-                // Console.WriteLine("Day {0}: {1}", turn+1, rv);
-            }
-            return rv;
-        }
-    }
+            if(parttwo) {
+            
+                for(int turn = 0; turn < 100; ++turn) {
+                    IList<Tuple<int,int>> flips = new List<Tuple<int,int>>();
+                    for(int ne = 1; ne < sz-1; ++ne) // [1,sz-1) to allow for the neighbours 
+                    for(int  e = 1;  e < sz-1; ++e) {
+                        int flippedneighbours = 0;
+                        for(int one = -1; one <= 1; ++one) for(int oe = -1; oe <= 1; ++oe) if(one != oe && cubicgrid[ne+one, e+oe]) ++flippedneighbours; 
+                        if((cubicgrid[ne,e] && (flippedneighbours == 0 || flippedneighbours > 2))   
+                           || (!cubicgrid[ne,e] && flippedneighbours == 2))
+                            flips.Add(new Tuple<int, int>(ne,e));
 
-    class Tile : IEquatable<Tile> {
-
-        readonly int _x;
-        readonly int _y;
-        bool _isWhite;
-        readonly IList<Tile> _neighbours;
-        public int X => _x;
-        public int Y => _y;
-
-        public bool IsWhite { get { return _isWhite; } }
-
-        public bool NeedsNeighbours { get { return _neighbours.Count == 0; } }
-
-
-        Tile(int x, int y, bool isW)
-        {
-            _x = x;
-            _y = y;
-            _isWhite = isW;
-            _neighbours = new List<Tile>();
-        }
-
-        Tile(Tile t, int ox, int oy) : this(t._x + ox, t._y + oy, true) { }
-
-        public static void EnsureExistence(int x, int y, IList<Tile> tiles) {
-            Tile c = new Tile(x,y, true);
-            int i = tiles.IndexOf(c);
-            if(i < 0)
-                tiles.Add(c);
-            else {
-                c = tiles[i];
-                if(!c.NeedsNeighbours)
-                    return;
-            } 
-            foreach(Tile t in new List<Tile> {  
-                    new Tile(c, -1, 1), // nw i
-                    new Tile(c, 1, 1), // ne 
-                    new Tile(c, -1, -1), // sw 
-                    new Tile(c, 1, -1), // se 
-                    new Tile(c, -2, 0), // w 
-                    new Tile(c, 2, 0)}) { // e 
-                if(!tiles.Contains(t)) {
-                    tiles.Add(t);
-                    c._neighbours.Add(t);    
-                } else { 
-                    c._neighbours.Add(tiles[tiles.IndexOf(t)]); // if it's already there, use it. 
+                    }
+                    foreach(Tuple<int,int> f in flips)
+                        cubicgrid[f.Item1, f.Item2] = !cubicgrid[f.Item1, f.Item2];
                 }
             }
+            
+            return cubicgrid.Cast<bool>().Where(c => c == true).Count();
         }
 
-        public static Tile TileMaker(string s) {
-            int x, y;
-            Calculate(s, out x, out y);
-            return new Tile(x, y, false);
-        }
-
-        static void Calculate(string s, out int x, out int y) {
-            if(string.IsNullOrEmpty(s)) {
-                x = 0; 
-                y = 0;
-                return;
-            }
-            int ox = 0; int oy = 0;
-            int offset = 0;
-            if(s[0] == 'n' || s[0] == 's') {
-                offset = 2;
-                oy = s[0] == 'n' ? 1 : -1;
-                ox = s[1] == 'e' ? 1 : -1;
-            } else {
-                offset = 1;
-                ox = s[0] == 'w' ? -2 : 2; 
-
-            }
-            Calculate(s.Substring(offset), out x, out y);
-            x += ox; 
-            y += oy;
-        }
-
-        public bool NeedsToFlip() { 
-            int blackNeighbours = _neighbours.Where(n => !n.IsWhite).Count();
-            if(IsWhite)
-                return blackNeighbours == 2;
-            else    
-                return blackNeighbours != 1 && blackNeighbours != 2;
-
-        }
-
-        public void Flip() {
-            _isWhite = !_isWhite;
-        }
-
-        public bool Equals(Tile other) {
-            return _x == other._x && _y == other._y;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("({0},{1}): {2} [{3}/{4}]", _x, _y, IsWhite ? "white" : "black", _neighbours.Where(n => !n.IsWhite).Count(), _neighbours.Count);
-        }
     }
 }

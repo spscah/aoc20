@@ -101,7 +101,7 @@ List management, Linked Lists/Circular collections (?), brute force limitations
 
 ### Day 24
 
-Parsing, hex grid representation (e.g. cube co-ordinates), brute force limitation   
+Parsing, hex grid representation (e.g. cube co-ordinates), brute force limitations   
 
 ### Day 25
 
